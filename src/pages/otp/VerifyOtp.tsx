@@ -18,17 +18,16 @@ export default function VerifyOtp() {
 
   async function verifyOtp(e: React.FormEvent) {
     e.preventDefault();
-    const otp = parseInt(value);
     if (value.length === 0) {
       return toast.error("Please enter an OTP");
     } else if (value.length !== 6) {
       return toast.error("Please enter a valid OTP");
-    } else if (isNaN(otp)) {
+    } else if (isNaN(parseInt(value))) {
       return toast.info("Please enter a valid OTP");
     }
     try {
       setLoading(true);
-      const res = await _POST("/verify-otp", { otp });
+      const res = await _POST("/verify-otp", { otp: value });
       if (res.data.sessionId) { 
         localStorage.setItem("sessionId", res.data.sessionId);
         toast.success("OTP verified successfully");
