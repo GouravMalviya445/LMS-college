@@ -27,9 +27,13 @@ export default function VerifyOtp() {
     }
     try {
       setLoading(true);
-      const res = await _POST("/verify-otp", { otp: value });
-      if (res.data.sessionId) { 
-        localStorage.setItem("sessionId", res.data.sessionId);
+      const userId = localStorage.getItem("userId"); // get user from localstorage
+
+      const res = await _POST("/verify-otp", { otp: value, userId });
+      if (res.data.sessionToken) { 
+
+        // store session token to sessionStorage
+        sessionStorage.setItem("sessionToken", res.data.sessionToken);
         toast.success("OTP verified successfully");
         setValue("");
         setLoading(false);

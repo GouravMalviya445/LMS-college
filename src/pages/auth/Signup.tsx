@@ -27,6 +27,9 @@ export default function Signup() {
         setLoading(false);
         
         const userId = res.data.userId;
+        // store user id to localstorage 
+        localStorage.setItem("userId", userId);
+        
         const otpRes = await _POST("/send-otp", { userId, email });
         if (otpRes.data.message) {
           toast.success(`User registered | we sent OTP to ${email} please verify`)
