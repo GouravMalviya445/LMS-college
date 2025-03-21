@@ -34,7 +34,7 @@ export default function VerifyOtp() {
 
         // store session token to sessionStorage
         sessionStorage.setItem("sessionToken", res.data.sessionToken);
-        toast.success("OTP verified successfully");
+        toast.success("User verified successfully");
         setValue("");
         setLoading(false);
         navigate("/dashboard");
