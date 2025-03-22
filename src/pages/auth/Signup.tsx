@@ -6,13 +6,15 @@ import { Loader } from "@/components/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { _POST } from "@/lib/apiClient";
 import { toast } from "sonner";
+import { AUTH_ROUTES } from "@/config/apiRoutes";
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
       email: "",
-      password: ""
+      password: "",
+      userName: ""
     }
   });
 
@@ -21,8 +23,8 @@ export default function Signup() {
   const signupUser = handleSubmit(async (data) => {
     try {
       setLoading(true);
-      const { email, password } = data;
-      const res = await _POST("/signup", { email, password });
+      const { email, password, userName } = data;
+      const res = await _POST(AUTH_ROUTES.SIGNUP, { email, password, userName });
       if (res.data.userId) {
         setLoading(false);
         
@@ -30,7 +32,7 @@ export default function Signup() {
         // store user id to localstorage 
         localStorage.setItem("userId", userId);
         
-        const otpRes = await _POST("/send-otp", { userId, email });
+        const otpRes = await _POST(AUTH_ROUTES.SEND_OTP, { userId, email });
         if (otpRes.data.message) {
           toast.success(`User registered | we sent OTP to ${email} please verify`)
         }
@@ -72,6 +74,24 @@ export default function Signup() {
           </div>
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
+          {/* name field */}
+          <div className="flex items-center justify-between gap-12">
+            <label htmlFor="name">
+              Name:
+            </label>
+            <Input
+              disabled={loading}
+              id="name"
+              type="text"
+              className="w-full"
+              placeholder="John Doe"
+              {...register("userName", { 
+                required: "Please enter your name",
+              })}
+              />
+          </div>
+          {errors.userName && <p className="text-red-500 text-sm">{errors.userName.message}</p>}
+
           {/* password field */}
           <div className="flex items-center justify-between gap-5">
             <label htmlFor="password">
@@ -93,7 +113,7 @@ export default function Signup() {
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
           {/* login button */}
-          <Button type="submit" className={`${loading ? "bg-gray-600 pointer-events-none" : "w-full text-lg mt-4 transition-all duration-300 ease-in-out"}`}>
+          <Button type="submit" className={`${loading ? "bg-gray-600 pointer-events-none" : "w-full text-lg mt-4 transition-all duration-300 ease-in-out"} cursor-pointer`}>
             {loading ? <Loader variant="spinner" height="25px" width="25px"/> : "Sign up"}
           </Button>
           

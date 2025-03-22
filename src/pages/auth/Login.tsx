@@ -6,6 +6,7 @@ import { Loader } from "@/components/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { _POST } from "@/lib/apiClient";
 import { toast } from "sonner";
+import { AUTH_ROUTES } from "@/config/apiRoutes";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,14 @@ export default function Login() {
     try {
       setLoading(true);
       const { email, password } = data;
-      const res = await _POST("/login", { email, password });
+
+      // login user
+      const res = await _POST(AUTH_ROUTES.LOGIN, { email, password });
+
       if (res.data.sessionToken) {
         setLoading(false);
+        
+        // store session token to localstorage
         localStorage.setItem("sessionToken", res.data?.sessionToken);
         toast.success("User logged in successfully")
         reset();

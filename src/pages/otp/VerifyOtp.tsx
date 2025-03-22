@@ -9,6 +9,7 @@ import { _POST } from "@/lib/apiClient";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { AUTH_ROUTES } from "@/config/apiRoutes";
 
 
 export default function VerifyOtp() {
@@ -29,11 +30,12 @@ export default function VerifyOtp() {
       setLoading(true);
       const userId = localStorage.getItem("userId"); // get user from localstorage
 
-      const res = await _POST("/verify-otp", { otp: value, userId });
+      // verify otp
+      const res = await _POST(AUTH_ROUTES.VERIFY_OTP, { otp: value, userId });
       if (res.data.sessionToken) { 
 
-        // store session token to sessionStorage
-        sessionStorage.setItem("sessionToken", res.data.sessionToken);
+        // store session token to localstorage
+        localStorage.setItem("sessionToken", res.data.sessionToken);
         toast.success("User verified successfully");
         setValue("");
         setLoading(false);
