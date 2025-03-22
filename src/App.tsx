@@ -3,6 +3,7 @@ import Home from './pages/dashboard';
 import About from './pages/about';
 import { Login, Signup } from './pages/auth';
 import VerifyOtp from './pages/otp/VerifyOtp';
+import { NotFound } from './pages/not-found/NotFound';
 
 export default function App(){
   return (
@@ -17,6 +18,7 @@ export default function App(){
           <Route path='user/verify' element={<VerifyOtp/>} />
           <Route path="dashboard" element={<Home />} />
           <Route path="about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>
